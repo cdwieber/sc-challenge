@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,9 +16,9 @@ class User extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOfPlayers($query): Builder
+    public function scopePlayers($query): Builder
     {
-        return $query->where('user_type', 'player');
+        return $query->where('user_type', '=', 'player');
     }
 
     public function getIsGoalieAttribute(): bool
