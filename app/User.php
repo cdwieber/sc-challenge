@@ -2,38 +2,32 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Notifiable;
+    public $timestamps = false;
 
     /**
-     * The attributes that are mass assignable.
+     * Players only local scope
      *
-     * @var array
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    public function scopeOfPlayers($query): Builder
+    {
+        return $query->where('user_type', 'player');
+    }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    public function getIsGoalieAttribute(): bool
+    {
+        return (bool) $this->can_play_goalie;
+    }
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getFullnameAttribute(): string
+    {
+        return Str::title($this->first_name . ' ' . $this->last_name);
+    }
 }
